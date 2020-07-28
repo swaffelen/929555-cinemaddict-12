@@ -3,6 +3,11 @@
 const FILMS_GRID_COUNT = 5;
 const FILMS_EXTRA_COUNT = 2;
 
+const headerElement = document.querySelector(`.header`);
+const main = document.querySelector(`.main`);
+const footer = document.querySelector(`.footer`);
+
+
 const createUserRankTemplate = () => {
   return (
     `<section class="header__profile profile">
@@ -101,11 +106,8 @@ const render = (container, position, text) => {
   container.insertAdjacentHTML(position, text);
 };
 
-const header = document.querySelector(`.header`);
 
-render(header, `beforeend`, createUserRankTemplate());
-
-const main = document.querySelector(`.main`);
+render(headerElement, `beforeend`, createUserRankTemplate());
 
 render(main, `beforeend`, createNavigationTemplate());
 render(main, `beforeend`, createFilterTemplate());
@@ -128,7 +130,7 @@ render(filmsList, `beforeend`, createShowMoreButton());
 render(films, `beforeend`, createFilmsListExtraTemplate(`Top rated`));
 render(films, `beforeend`, createFilmsListExtraTemplate(`Most commented`));
 
-const filmsListExtras = document.querySelectorAll(`.films-list--extra`);
+const filmsListExtras = films.querySelectorAll(`.films-list--extra`);
 
 filmsListExtras.forEach((node) => {
   const container = node.querySelector(`.films-list__container`);
@@ -137,5 +139,4 @@ filmsListExtras.forEach((node) => {
   }
 });
 
-const footer = document.querySelector(`.footer`);
 render(footer, `beforeend`, createFooterStatisticTemplate());
