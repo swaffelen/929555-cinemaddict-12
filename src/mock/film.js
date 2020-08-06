@@ -64,9 +64,9 @@ const generateDate = (start, end) => {
   return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
 };
 
-const convertMinsIntoHours = (number) => {
-  const minutes = (number % 60);
-  const hours = (number - minutes) / 60;
+const convertMinsIntoHours = (value) => {
+  const minutes = (value % 60);
+  const hours = (value - minutes) / 60;
 
   return `${hours}h ${minutes}m`;
 };
@@ -80,12 +80,17 @@ const generateComments = () => {
   };
 };
 
+const generateFilmsRanking = () => {
+  const ranking = `${getRandomInteger(1, 10)}.${getRandomInteger(0, 9)}`;
+
+  return ranking > 10 ? generateFilmsRanking() : ranking;
+};
+
 export const generateFilm = () => {
   const comments = Array.from({length: getRandomInteger(0, 10)})
   .map(generateComments);
 
   const year = generateDate(new Date(1896, 0, 1), new Date(2020, 0, 1)).getFullYear();
-  const rating = `${getRandomInteger(1, 10)}.${getRandomInteger(1, 10)}`;
 
   const duration = convertMinsIntoHours(getRandomInteger(16, 180));
 
@@ -94,7 +99,7 @@ export const generateFilm = () => {
     poster: POSTERS[getRandomInteger(0, POSTERS.length - 1)],
     description: generateDescription(),
     comments,
-    rating: getRandomInteger(1, 10),
+    rating: generateFilmsRanking(),
     year,
     genre: GENRES[getRandomInteger(0, GENRES.length - 1)],
     duration,
