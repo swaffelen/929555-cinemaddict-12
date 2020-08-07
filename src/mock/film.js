@@ -82,7 +82,7 @@ const ACTORS = [
   `José Ferrer`,
   `Broderick Crawford`,
   `Ronald Colman`,
-  `Fredric MarchRay`,
+  `Fredric March`,
   `Milland Bing`];
 
 const COUNTRY_LIST = [
@@ -156,4 +156,3 @@ export const generateFilm = () => {
     isFavorite: Boolean(getRandomInteger(0, 1))
   };
 };
-

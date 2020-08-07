@@ -1,8 +1,6 @@
-import {humanizeDate} from "../util.js";
-
 const createGenresTemplate = (genres) => {
   return (
-    `<td class="film-details__term">${genres > 1 ? `Genres` : `Genre`}</td>
+    `<td class="film-details__term">${genres.length > 1 ? `Genres` : `Genre`}</td>
     <td class="film-details__cell">
       ${genres.map((genre) => `<span class="film-details__genre">${genre}</span>`).join(``)}
     </td>`
@@ -45,7 +43,7 @@ export const createFilmPopupTemplate = (film) => {
 
   const genresTemplate = createGenresTemplate(genres);
 
-  const releaseDate = `${release.getDate()} ${humanizeDate(release)}`;
+  const releaseDate = `${release.getDate()} ${release.toLocaleString(`en-US`, {month: `long`, year: `numeric`})}`;
 
   const commentsTemplate = createCommentsTemplate(comments);
 
