@@ -12,7 +12,7 @@ import {generateFilm} from "../src/mock/film.js";
 import {countFiltersIndicators} from "../src/mock/filters.js";
 import {render} from "../src/util.js";
 
-const FILMS_GRID_COUNT = 5;
+const FILMS_GRID_COUNT = 20;
 const FILMS_EXTRA_COUNT = 2;
 
 const headerElement = document.querySelector(`.header`);
@@ -55,4 +55,4 @@ filmsListExtras.forEach((node) => {
 });
 
 // render(footer, `afterbegin`, createFilmPopupTemplate(films[0]));
-render(footer, `beforeend`, createFooterStatisticTemplate());
+render(footer, `beforeend`, createFooterStatisticTemplate(films));
