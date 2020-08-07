@@ -83,16 +83,14 @@ const ACTORS = [
   `Broderick Crawford`,
   `Ronald Colman`,
   `Fredric MarchRay`,
-  `Milland Bing`
-];
+  `Milland Bing`];
 
 const COUNTRY_LIST = [
   `United Kingdom`,
   `Sweden`,
   `Singapore`,
   `USA`,
-  `France`
-];
+  `France`];
 
 const generateDescription = () => {
   return new Array(getRandomInteger(1, 5)).fill(``).reduce((acc) => {
