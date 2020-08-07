@@ -8,8 +8,8 @@ const TEXT_FILLERS = [
   `In rutrum ac purus sit amet tempus. `];
 
 const TITLES = [
-  `Made For Each Other`, `
-  Popeye Meets Sinbad`,
+  `Made For Each Other`,
+  `Popeye the Sailor Meets Sindbad the Sailor`,
   `Sagebrush Trail`,
   `Santa Claus Conquers The Martians`,
   `The Dance Of Life`,
@@ -34,10 +34,10 @@ const GENRES = [
   `Horror`];
 
 const EMOJIS = [
-  `images/emoji/angry.png`,
-  `images/emoji/puke.png`,
-  `images/emoji/sleeping.png`,
-  `images/emoji/smile.png`];
+  `angry`,
+  `puke`,
+  `sleeping`,
+  `smile`];
 
 const AUTHORS = [
   `Misael Santos`,
@@ -53,6 +53,46 @@ const AUTHORS = [
   `Emilio Miranda`,
   `Rene Armstrong`];
 
+const DIRECTORS = [
+  `Sam Raimi`,
+  `David Cronenberg`,
+  `Brian De Palma`,
+  `Quentin Tarantino`,
+  `Clint Eastwood`,
+  `Kathryn Bigelow`,
+  `Terrence Malick`,
+  `Woody Allen`,
+  `Spike Lee`,
+  `Tim Burton`];
+
+const SCREENWRITERS = [
+  `Quentin Tarantino`,
+  `Federico Fellini`,
+  `Stanley Kubrick`,
+  `David Fincher`,
+  `Robert Zemeckis`,
+  `Ridley Scott`];
+
+const ACTORS = [
+  `William Hurt`,
+  `Yul Brynner`,
+  `Ernest Borgnine`,
+  `Benedict Cumberbatch`,
+  `Rod Steiger`,
+  `José Ferrer`,
+  `Broderick Crawford`,
+  `Ronald Colman`,
+  `Fredric MarchRay`,
+  `Milland Bing`
+];
+
+const COUNTRY_LIST = [
+  `United Kingdom`,
+  `Sweden`,
+  `Singapore`,
+  `USA`,
+  `France`
+];
 
 const generateDescription = () => {
   return new Array(getRandomInteger(1, 5)).fill(``).reduce((acc) => {
@@ -86,23 +126,33 @@ const generateFilmsRanking = () => {
   return ranking > 10 ? generateFilmsRanking() : ranking;
 };
 
+const getRandomValues = (array, min, max) => {
+  return Array.from({length: getRandomInteger(min, max)}).
+  map(() => array[getRandomInteger(0, array.length - 1)]);
+};
+
 export const generateFilm = () => {
   const comments = Array.from({length: getRandomInteger(0, 10)})
   .map(generateComments);
 
-  const year = generateDate(new Date(1896, 0, 1), new Date(2020, 0, 1)).getFullYear();
+  const release = generateDate(new Date(1896, 0, 1), new Date(2020, 0, 1));
 
-  const duration = convertMinsIntoHours(getRandomInteger(16, 180));
+  const runtime = convertMinsIntoHours(getRandomInteger(16, 180));
 
   return {
     title: TITLES[getRandomInteger(0, TITLES.length - 1)],
     poster: POSTERS[getRandomInteger(0, POSTERS.length - 1)],
     description: generateDescription(),
     comments,
+    age: `${getRandomInteger(6, 18)}+`,
     rating: generateFilmsRanking(),
-    year,
-    genre: GENRES[getRandomInteger(0, GENRES.length - 1)],
-    duration,
+    release,
+    genres: getRandomValues(GENRES, 1, 3),
+    runtime,
+    director: DIRECTORS[getRandomInteger(0, DIRECTORS.length - 1)],
+    writers: getRandomValues(SCREENWRITERS, 1, 3),
+    cast: getRandomValues(ACTORS, 2, 5),
+    country: COUNTRY_LIST[getRandomInteger(0, COUNTRY_LIST.length - 1)],
     isWatchlisted: Boolean(getRandomInteger(0, 1)),
     isWatched: Boolean(getRandomInteger(0, 1)),
     isFavorite: Boolean(getRandomInteger(0, 1))
