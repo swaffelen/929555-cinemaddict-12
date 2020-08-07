@@ -1,4 +1,5 @@
 import {getRandomInteger} from "../util.js";
+import {EMOJIS} from "../consts.js";
 
 const TEXT_FILLERS = [
   `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras aliquet varius magna, non porta ligula feugiat eget. `,
@@ -32,12 +33,6 @@ const GENRES = [
   `Adventure`,
   `Action`,
   `Horror`];
-
-const EMOJIS = [
-  `angry`,
-  `puke`,
-  `sleeping`,
-  `smile`];
 
 const AUTHORS = [
   `Misael Santos`,
