@@ -1,10 +1,11 @@
+import {inspectFlag} from "../util.js";
+
 export const createFilmCardTemplate = (movie) => {
   const {title, poster, description, comments, rating,
     release, genres, runtime, isWatchlisted, isWatched, isFavorite} = movie;
 
-  const inspectFlag = (flag) => {
-    return flag ? `film-card__controls-item--active` : ``;
-  };
+  const activeClass = `film-card__controls-item--active`;
+
   const year = release.getFullYear();
   return (
     `<article class="film-card">
@@ -19,9 +20,9 @@ export const createFilmCardTemplate = (movie) => {
           <p class="film-card__description">${description.length > 140 ? `${description.substr(0, 139)}...` : description}</p>
           <a class="film-card__comments">${comments.length} comments</a>
           <form class="film-card__controls">
-            <button class="film-card__controls-item button film-card__controls-item--add-to-watchlist ${inspectFlag(isWatchlisted)}">Add to watchlist</button>
-            <button class="film-card__controls-item button film-card__controls-item--mark-as-watched ${inspectFlag(isWatched)}">Mark as watched</button>
-            <button class="film-card__controls-item button film-card__controls-item--favorite ${inspectFlag(isFavorite)}">Mark as favorite</button>
+            <button class="film-card__controls-item button film-card__controls-item--add-to-watchlist ${inspectFlag(isWatchlisted, activeClass)}">Add to watchlist</button>
+            <button class="film-card__controls-item button film-card__controls-item--mark-as-watched ${inspectFlag(isWatched, activeClass)}">Mark as watched</button>
+            <button class="film-card__controls-item button film-card__controls-item--favorite ${inspectFlag(isFavorite, activeClass)}">Mark as favorite</button>
           </form>
     </article>`
   );

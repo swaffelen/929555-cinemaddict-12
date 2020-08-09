@@ -1,3 +1,6 @@
+import {EMOJIS} from "../consts.js";
+import {inspectFlag} from "../util.js";
+
 const createGenresTemplate = (genres) => {
   return (
     `<td class="film-details__term">${genres.length > 1 ? `Genres` : `Genre`}</td>
@@ -11,12 +14,8 @@ const createCommentsTemplate = (comments) => {
   return comments.map((comment) => {
     const {emotion, message, name, date} = comment;
 
-    const generateTimeWithLeadingZero = () => {
-      const hours = date.getHours();
-      const minutes = date.getMinutes();
-
-      return `${hours < 10 ? `0${hours}` : hours}:${minutes < 10 ? `0${minutes}` : minutes}`;
-    };
+    const day = date.toLocaleString(`en-US`, {day: `numeric`, month: `numeric`, year: `numeric`});
+    const time = `${date.getHours()}:${date.getMinutes()}`;
 
     return (
       `<li class="film-details__comment">
@@ -27,7 +26,7 @@ const createCommentsTemplate = (comments) => {
         <p class="film-details__comment-text">${message}</p>
         <p class="film-details__comment-info">
           <span class="film-details__comment-author">${name}</span>
-          <span class="film-details__comment-day">${date.getFullYear()}/${(date.getMonth())}/${(date.getDate())} ${generateTimeWithLeadingZero()}</span>
+          <span class="film-details__comment-day">${day} ${time}</span>
           <button class="film-details__comment-delete">Delete</button>
         </p>
       </div>
@@ -36,16 +35,24 @@ const createCommentsTemplate = (comments) => {
   }).join(``);
 };
 
-
 export const createFilmPopupTemplate = (film) => {
   const {poster, age, title, rating, director, writers,
-    cast, release, runtime, country, genres, description, comments} = film;
+    cast, release, runtime, country, genres, description, comments, isWatchlisted, isWatched, isFavorite} = film;
 
   const genresTemplate = createGenresTemplate(genres);
 
   const releaseDate = `${release.getDate()} ${release.toLocaleString(`en-US`, {month: `long`, year: `numeric`})}`;
 
   const commentsTemplate = createCommentsTemplate(comments);
+
+  const newCommentEmojiList = EMOJIS.map((emoji) => {
+    return (
+      `<input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-${emoji}" value="${emoji}">
+      <label class="film-details__emoji-label" for="emoji-${emoji}">
+        <img src="./images/emoji/${emoji}.png" width="30" height="30" alt="emoji">
+      </label>`
+    );
+  }).join(``);
 
   return (
     `<section class="film-details">
@@ -110,13 +117,13 @@ export const createFilmPopupTemplate = (film) => {
       </div>
 
       <section class="film-details__controls">
-        <input type="checkbox" class="film-details__control-input visually-hidden" id="watchlist" name="watchlist">
+        <input type="checkbox" class="film-details__control-input visually-hidden" id="watchlist" name="watchlist" ${inspectFlag(isWatchlisted, `checked`)}>
         <label for="watchlist" class="film-details__control-label film-details__control-label--watchlist">Add to watchlist</label>
 
-        <input type="checkbox" class="film-details__control-input visually-hidden" id="watched" name="watched">
+        <input type="checkbox" class="film-details__control-input visually-hidden" id="watched" name="watched" ${inspectFlag(isWatched, `checked`)}>
         <label for="watched" class="film-details__control-label film-details__control-label--watched">Already watched</label>
 
-        <input type="checkbox" class="film-details__control-input visually-hidden" id="favorite" name="favorite">
+        <input type="checkbox" class="film-details__control-input visually-hidden" id="favorite" name="favorite" ${inspectFlag(isFavorite, `checked`)}>
         <label for="favorite" class="film-details__control-label film-details__control-label--favorite">Add to favorites</label>
       </section>
     </div>
@@ -137,25 +144,7 @@ export const createFilmPopupTemplate = (film) => {
           </label>
 
           <div class="film-details__emoji-list">
-            <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-smile" value="smile">
-            <label class="film-details__emoji-label" for="emoji-smile">
-              <img src="./images/emoji/smile.png" width="30" height="30" alt="emoji">
-            </label>
-
-            <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-sleeping" value="sleeping">
-            <label class="film-details__emoji-label" for="emoji-sleeping">
-              <img src="./images/emoji/sleeping.png" width="30" height="30" alt="emoji">
-            </label>
-
-            <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-puke" value="puke">
-            <label class="film-details__emoji-label" for="emoji-puke">
-              <img src="./images/emoji/puke.png" width="30" height="30" alt="emoji">
-            </label>
-
-            <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-angry" value="angry">
-            <label class="film-details__emoji-label" for="emoji-angry">
-              <img src="./images/emoji/angry.png" width="30" height="30" alt="emoji">
-            </label>
+            ${newCommentEmojiList}
           </div>
         </div>
       </section>`

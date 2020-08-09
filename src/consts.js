@@ -1,9 +1,11 @@
 export const EXTRA_FILMS_CATEGORIES = [
   `Top rated`,
-  `Most commented`];
+  `Most commented`
+];
 
 export const EMOJIS = [
-  `angry`,
-  `puke`,
+  `smile`,
   `sleeping`,
-  `smile`];
+  `puke`,
+  `angry`
+];

@@ -1,4 +1,3 @@
-import {getRandomInteger} from "../util.js";
 import {EMOJIS} from "../consts.js";
 
 const TEXT_FILLERS = [
@@ -6,7 +5,8 @@ const TEXT_FILLERS = [
   `Fusce tristique felis at fermentum pharetra. Aliquam id orci ut lectus varius viverra. `,
   `Nullam nunc ex, convallis sed finibus eget, sollicitudin eget ante. `,
   `Phasellus eros mauris, condimentum sed nibh vitae, sodales efficitur ipsum. `,
-  `In rutrum ac purus sit amet tempus. `];
+  `In rutrum ac purus sit amet tempus. `
+];
 
 const TITLES = [
   `Made For Each Other`,
@@ -15,7 +15,8 @@ const TITLES = [
   `Santa Claus Conquers The Martians`,
   `The Dance Of Life`,
   `The Great Flamarion`,
-  `The Man With The Golden Arm`];
+  `The Man With The Golden Arm`
+];
 
 const POSTERS = [
   `images/posters/made-for-each-other.png`,
@@ -24,7 +25,8 @@ const POSTERS = [
   `images/posters/santa-claus-conquers-the-martians.jpg`,
   `images/posters/the-dance-of-life.jpg`,
   `images/posters/the-great-flamarion.jpg`,
-  `images/posters/the-man-with-the-golden-arm.jpg`];
+  `images/posters/the-man-with-the-golden-arm.jpg`
+];
 
 const GENRES = [
   `Musical`,
@@ -32,7 +34,8 @@ const GENRES = [
   `Drama`,
   `Adventure`,
   `Action`,
-  `Horror`];
+  `Horror`
+];
 
 const AUTHORS = [
   `Misael Santos`,
@@ -46,7 +49,8 @@ const AUTHORS = [
   `Nigel Yates`,
   `Johanna Ryan`,
   `Emilio Miranda`,
-  `Rene Armstrong`];
+  `Rene Armstrong`
+];
 
 const DIRECTORS = [
   `Sam Raimi`,
@@ -58,7 +62,8 @@ const DIRECTORS = [
   `Terrence Malick`,
   `Woody Allen`,
   `Spike Lee`,
-  `Tim Burton`];
+  `Tim Burton`
+];
 
 const SCREENWRITERS = [
   `Quentin Tarantino`,
@@ -66,7 +71,8 @@ const SCREENWRITERS = [
   `Stanley Kubrick`,
   `David Fincher`,
   `Robert Zemeckis`,
-  `Ridley Scott`];
+  `Ridley Scott`
+];
 
 const ACTORS = [
   `William Hurt`,
@@ -78,14 +84,20 @@ const ACTORS = [
   `Broderick Crawford`,
   `Ronald Colman`,
   `Fredric March`,
-  `Milland Bing`];
+  `Milland Bing`
+];
 
 const COUNTRY_LIST = [
   `United Kingdom`,
   `Sweden`,
   `Singapore`,
   `USA`,
-  `France`];
+  `France`
+];
+
+const getRandomInteger = (min, max) => {
+  return Math.floor(Math.random() * (max - min + 1) + min);
+};
 
 const generateDescription = () => {
   return new Array(getRandomInteger(1, 5)).fill(``).reduce((acc) => {
@@ -120,8 +132,8 @@ const generateFilmsRanking = () => {
 };
 
 const getRandomValues = (array, min, max) => {
-  return Array.from({length: getRandomInteger(min, max)}).
-  map(() => array[getRandomInteger(0, array.length - 1)]);
+  return Array.from({length: getRandomInteger(min, max)})
+  .map(() => array[getRandomInteger(0, array.length - 1)]);
 };
 
 export const generateFilm = () => {

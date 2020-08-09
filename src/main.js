@@ -22,9 +22,12 @@ const main = document.querySelector(`.main`);
 const footer = document.querySelector(`.footer`);
 
 const films = Array.from({length: FILMS_GRID_COUNT}).map(generateFilm);
+const filmsTopRated = [...films].sort((a, b) => b.rating - a.rating);
+const filmsTopCommented = [...films].sort((a, b) => b.comments.length - a.comments.length);
+
 const filters = countFiltersIndicators(films);
 
-render(headerElement, createUserRankTemplate());
+render(headerElement, createUserRankTemplate(filters.watched));
 
 render(main, createNavigationTemplate(filters));
 render(main, createSortingTemplate());
@@ -68,14 +71,12 @@ EXTRA_FILMS_CATEGORIES.forEach((category) => {
   render(filmsBoardElement, createFilmsListExtraTemplate(category));
 });
 
-const filmsListExtras = filmsBoardElement.querySelectorAll(`.films-list--extra`);
+const filmsExtrasContainers = filmsBoardElement.querySelectorAll(`.films-list__container`);
 
-filmsListExtras.forEach((node) => {
-  const container = node.querySelector(`.films-list__container`);
-  for (let i = 0; i < FILMS_EXTRA_COUNT; i++) {
-    render(container, createFilmCardTemplate(films[i]));
-  }
-});
+for (let i = 0; i < FILMS_EXTRA_COUNT; i++) {
+  render(filmsExtrasContainers[1], createFilmCardTemplate(filmsTopRated[i]));
+  render(filmsExtrasContainers[2], createFilmCardTemplate(filmsTopCommented[i]));
+}
 
 render(footer, createFilmPopupTemplate(films[0]), `afterbegin`);
 render(footer, createFooterStatisticTemplate(films));
