@@ -95,7 +95,7 @@ const COUNTRY_LIST = [
   `France`
 ];
 
-const getRandomInteger = (min, max) => {
+const getRandomInteger = (min = 0, max = 1) => {
   return Math.floor(Math.random() * (max - min + 1) + min);
 };
 
@@ -158,8 +158,8 @@ export const generateFilm = () => {
     writers: getRandomValues(SCREENWRITERS, 1, 3),
     cast: getRandomValues(ACTORS, 2, 5),
     country: COUNTRY_LIST[getRandomInteger(0, COUNTRY_LIST.length - 1)],
-    isWatchlisted: Boolean(getRandomInteger(0, 1)),
-    isWatched: Boolean(getRandomInteger(0, 1)),
-    isFavorite: Boolean(getRandomInteger(0, 1))
+    isWatchlisted: Boolean(getRandomInteger()),
+    isWatched: Boolean(getRandomInteger()),
+    isFavorite: Boolean(getRandomInteger())
   };
 };
