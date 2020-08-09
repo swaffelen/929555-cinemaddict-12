@@ -78,5 +78,5 @@ for (let i = 0; i < FILMS_EXTRA_COUNT; i++) {
   render(filmsExtrasContainers[2], createFilmCardTemplate(filmsTopCommented[i]));
 }
 
-render(footer, createFilmPopupTemplate(films[0]), `afterbegin`);
+render(footer, createFilmPopupTemplate(films[0]));
 render(footer, createFooterStatisticTemplate(films));

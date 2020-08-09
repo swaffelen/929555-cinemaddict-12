@@ -9,3 +9,5 @@ export const EMOJIS = [
   `puke`,
   `angry`
 ];
+
+export const DESCRIPTION_MAX_LENGTH = 139;

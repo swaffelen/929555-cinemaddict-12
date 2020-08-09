@@ -1,3 +1,4 @@
+import {DESCRIPTION_MAX_LENGTH} from "../consts.js";
 import {inspectFlag} from "../util.js";
 
 export const createFilmCardTemplate = (movie) => {
@@ -5,6 +6,8 @@ export const createFilmCardTemplate = (movie) => {
     release, genres, runtime, isWatchlisted, isWatched, isFavorite} = movie;
 
   const activeClass = `film-card__controls-item--active`;
+
+  const descriptionText = description.length > DESCRIPTION_MAX_LENGTH ? `${description.slice(0, DESCRIPTION_MAX_LENGTH)}...` : description;
 
   const year = release.getFullYear();
   return (
@@ -17,7 +20,7 @@ export const createFilmCardTemplate = (movie) => {
             <span class="film-card__genre">${genres[0]}</span>
           </p>
           <img src="./${poster}" alt="" class="film-card__poster">
-          <p class="film-card__description">${description.length > 140 ? `${description.substr(0, 139)}...` : description}</p>
+          <p class="film-card__description">${descriptionText}</p>
           <a class="film-card__comments">${comments.length} comments</a>
           <form class="film-card__controls">
             <button class="film-card__controls-item button film-card__controls-item--add-to-watchlist ${inspectFlag(isWatchlisted, activeClass)}">Add to watchlist</button>
