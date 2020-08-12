@@ -1,4 +1,5 @@
 import {EMOJIS} from "../consts.js";
+import {getRandomInteger, generateDate} from "../util.js";
 
 const TEXT_FILLERS = [
   `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras aliquet varius magna, non porta ligula feugiat eget. `,
@@ -95,18 +96,10 @@ const COUNTRY_LIST = [
   `France`
 ];
 
-const getRandomInteger = (min = 0, max = 1) => {
-  return Math.floor(Math.random() * (max - min + 1) + min);
-};
-
 const generateDescription = () => {
   return new Array(getRandomInteger(1, 5)).fill(``).reduce((acc) => {
     return acc + TEXT_FILLERS[getRandomInteger(0, TEXT_FILLERS.length - 1)];
   }, ``);
-};
-
-const generateDate = (start, end) => {
-  return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
 };
 
 const convertMinsIntoHours = (value) => {

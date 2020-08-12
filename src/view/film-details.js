@@ -1,5 +1,5 @@
 import {EMOJIS} from "../consts.js";
-import {inspectFlag} from "../util.js";
+import {inspectFlag, createElement} from "../util.js";
 
 const createGenresTemplate = (genres) => {
   return (
@@ -35,7 +35,7 @@ const createCommentsTemplate = (comments) => {
   }).join(``);
 };
 
-export const createFilmPopupTemplate = (film) => {
+const createFilmPopupTemplate = (film) => {
   const {poster, age, title, rating, director, writers,
     cast, release, runtime, country, genres, description, comments, isWatchlisted, isWatched, isFavorite} = film;
 
@@ -150,3 +150,26 @@ export const createFilmPopupTemplate = (film) => {
       </section>`
   );
 };
+
+export default class FilmDetails {
+  constructor(film) {
+    this._film = film;
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createFilmPopupTemplate(this._film);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
