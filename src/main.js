@@ -14,7 +14,7 @@ import {countFiltersIndicators} from "../src/mock/filters.js";
 import {EXTRA_FILMS_CATEGORIES} from "../src/consts.js";
 import {render, processEscPressKey} from "../src/util.js";
 
-const FILMS_GRID_COUNT = 24;
+const FILMS_GRID_COUNT = 0;
 const FILMS_EXTRA_COUNT = 2;
 const FILMS_COUNT_PER_STEP = 5;
 
@@ -66,18 +66,34 @@ const renderFilm = (filmListElement, film) => {
 render(headerElement, new RankView(filters.watched).getElement());
 render(main, new NavigationView(filters).getElement());
 render(main, new SortView().getElement());
+render(footerStatistics, new FooterStatisticsView(films).getElement());
 
 const filmsContainerComponent = new FilmsContainerView();
 render(main, filmsContainerComponent.getElement());
 
-const filmsListComponent = new FilmsListView();
+const filmsListComponent = new FilmsListView(films);
 render(filmsContainerComponent.getElement(), filmsListComponent.getElement());
 
 const filmsListContainerComponent = new FilmsListContainerView();
-render(filmsListComponent.getElement(), filmsListContainerComponent.getElement());
 
-for (let i = 0; i < Math.min(FILMS_GRID_COUNT, FILMS_COUNT_PER_STEP); i++) {
-  renderFilm(filmsListContainerComponent.getElement(), films[i]);
+if (films.length) {
+  render(filmsListComponent.getElement(), filmsListContainerComponent.getElement());
+
+  for (let i = 0; i < Math.min(FILMS_GRID_COUNT, FILMS_COUNT_PER_STEP); i++) {
+    renderFilm(filmsListContainerComponent.getElement(), films[i]);
+  }
+
+  EXTRA_FILMS_CATEGORIES.forEach((category) => {
+    render(filmsContainerComponent.getElement(), new FilmsListExtraView(category).getElement());
+  });
+
+  const [topRatedNode, mostCommentedNode] = filmsContainerComponent.getElement()
+  .querySelectorAll(`.films-list--extra .films-list__container`);
+
+  for (let i = 0; i < FILMS_EXTRA_COUNT; i++) {
+    renderFilm(topRatedNode, filmsTopRated[i]);
+    renderFilm(mostCommentedNode, filmsTopCommented[i]);
+  }
 }
 
 if (films.length > FILMS_COUNT_PER_STEP) {
@@ -102,15 +118,3 @@ if (films.length > FILMS_COUNT_PER_STEP) {
     }
   });
 }
-
-EXTRA_FILMS_CATEGORIES.forEach((category) => {
-  render(filmsContainerComponent.getElement(), new FilmsListExtraView(category).getElement());
-});
-
-const [, topRatedNode, mostCommentedNode] = filmsContainerComponent.getElement().querySelectorAll(`.films-list__container`);
-for (let i = 0; i < FILMS_EXTRA_COUNT; i++) {
-  renderFilm(topRatedNode, filmsTopRated[i]);
-  renderFilm(mostCommentedNode, filmsTopCommented[i]);
-}
-
-render(footerStatistics, new FooterStatisticsView(films).getElement());
