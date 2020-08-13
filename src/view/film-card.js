@@ -1,9 +1,9 @@
 import {DESCRIPTION_MAX_LENGTH} from "../consts.js";
-import {inspectFlag} from "../util.js";
+import {inspectFlag, createElement} from "../util.js";
 
-export const createFilmCardTemplate = (movie) => {
+const createFilmCardTemplate = (film) => {
   const {title, poster, description, comments, rating,
-    release, genres, runtime, isWatchlisted, isWatched, isFavorite} = movie;
+    release, genres, runtime, isWatchlisted, isWatched, isFavorite} = film;
 
   const activeClass = `film-card__controls-item--active`;
 
@@ -30,3 +30,26 @@ export const createFilmCardTemplate = (movie) => {
     </article>`
   );
 };
+
+export default class FilmCard {
+  constructor(film) {
+    this._film = film;
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createFilmCardTemplate(this._film);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
