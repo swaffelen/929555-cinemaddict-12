@@ -14,7 +14,7 @@ import {countFiltersIndicators} from "../src/mock/filters.js";
 import {EXTRA_FILMS_CATEGORIES} from "../src/consts.js";
 import {render, processEscPressKey} from "../src/util.js";
 
-const FILMS_GRID_COUNT = 0;
+const FILMS_GRID_COUNT = 24;
 const FILMS_EXTRA_COUNT = 2;
 const FILMS_COUNT_PER_STEP = 5;
 
