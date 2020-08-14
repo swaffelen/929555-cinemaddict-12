@@ -1,20 +1,23 @@
 import {createElement} from "../util.js";
 
-const createFilmsListTemplate = () => {
+const createFilmsListTemplate = (films) => {
+  const noFilmsHeaderTemplate = `<h2 class="films-list__title">There are no movies in our database</h2>`;
+  const defaultHeaderTemplate = `<h2 class="films-list__title visually-hidden">All movies. Upcoming</h2>`;
   return (
     `<section class="films-list">
-      <h2 class="films-list__title visually-hidden">All movies. Upcoming</h2>
+      ${films.length ? defaultHeaderTemplate : noFilmsHeaderTemplate}
     </section>`
   );
 };
 
 export default class FilmsList {
-  constructor() {
+  constructor(films) {
+    this._films = films;
     this._element = null;
   }
 
   getTemplate() {
-    return createFilmsListTemplate();
+    return createFilmsListTemplate(this._films);
   }
 
   getElement() {
