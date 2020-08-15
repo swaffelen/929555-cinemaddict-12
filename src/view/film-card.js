@@ -1,5 +1,5 @@
 import {DESCRIPTION_MAX_LENGTH} from "../consts.js";
-import {inspectFlag} from "../util.js";
+import {inspectFlag} from "../utils/common.js";
 import AbstractView from "./abstract.js";
 
 const createFilmCardTemplate = (film) => {
@@ -36,9 +36,28 @@ export default class FilmCard extends AbstractView {
   constructor(film) {
     super();
     this._film = film;
+    this._clickHandler = this._clickHandler.bind(this);
   }
 
   getTemplate() {
     return createFilmCardTemplate(this._film);
+  }
+
+  _clickHandler(evt) {
+    evt.preventDefault();
+
+    const poster = this.getElement().querySelector(`.film-card__poster`);
+    const title = this.getElement().querySelector(`.film-card__title`);
+    const comments = this.getElement().querySelector(`.film-card__comments`);
+
+    if (evt.target === poster || evt.target === title || evt.target === comments) {
+      this._callback.click();
+    }
+  }
+
+  setClickHandler(callback) {
+    this._callback.click = callback;
+
+    this.getElement().addEventListener(`click`, this._clickHandler);
   }
 }

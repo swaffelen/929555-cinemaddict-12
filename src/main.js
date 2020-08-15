@@ -12,7 +12,8 @@ import FilmDetailsView from "./view/film-details.js";
 import {generateFilm} from "../src/mock/film.js";
 import {countFiltersIndicators} from "../src/mock/filters.js";
 import {EXTRA_FILMS_CATEGORIES} from "../src/consts.js";
-import {render, processEscPressKey} from "../src/util.js";
+import {processEscPressKey} from "../src/utils/common.js";
+import {render, addElement, deleteElement} from "../src/utils/render.js";
 
 const FILMS_GRID_COUNT = 24;
 const FILMS_EXTRA_COUNT = 2;
@@ -31,55 +32,39 @@ const renderFilm = (filmListElement, film) => {
   const filmCardComponent = new FilmCardView(film);
   const filmDetailsComponent = new FilmDetailsView(film);
 
-  const onPopupEscPress = (evt) => processEscPressKey(evt, closePopup);
+  const onPopupEscPress = (evt) => processEscPressKey(evt, deleteElement(filmDetailsComponent));
 
-  const openPopup = () => {
-    document.body.append(filmDetailsComponent.getElement());
+  filmCardComponent.setClickHandler(() => {
+    addElement(filmDetailsComponent);
     document.addEventListener(`keydown`, onPopupEscPress);
-  };
-
-  const closePopup = () => {
-    filmDetailsComponent.getElement().remove();
-  };
-
-  filmCardComponent.getElement().addEventListener(`click`, (evt) => {
-    evt.preventDefault();
-
-    const poster = filmCardComponent.getElement().querySelector(`.film-card__poster`);
-    const title = filmCardComponent.getElement().querySelector(`.film-card__title`);
-    const comments = filmCardComponent.getElement().querySelector(`.film-card__comments`);
-
-    if (evt.target === poster || evt.target === title || evt.target === comments) {
-      openPopup();
-    }
   });
 
-  filmDetailsComponent.getElement().querySelector(`.film-details__close-btn`)
-  .addEventListener(`click`, () => {
-    closePopup();
+  filmDetailsComponent.setClickHandler(() => {
+    deleteElement(filmDetailsComponent);
+    document.removeEventListener(`keydown`, onPopupEscPress);
   });
 
-  render(filmListElement, filmCardComponent.getElement());
+  render(filmListElement, filmCardComponent);
 };
 
 const renderFilmBoard = (filmBoardContainer, filmItems) => {
   const filmsContainerComponent = new FilmsContainerView();
-  render(filmBoardContainer, filmsContainerComponent.getElement());
+  render(filmBoardContainer, filmsContainerComponent);
 
   const filmsListComponent = new FilmsListView(films);
-  render(filmsContainerComponent.getElement(), filmsListComponent.getElement());
+  render(filmsContainerComponent, filmsListComponent);
 
   const filmsListContainerComponent = new FilmsListContainerView();
 
   if (filmItems.length) {
-    render(filmsListComponent.getElement(), filmsListContainerComponent.getElement());
+    render(filmsListComponent, filmsListContainerComponent);
 
     filmItems
     .slice(0, Math.min(FILMS_GRID_COUNT, FILMS_COUNT_PER_STEP))
-    .forEach((filmItem) => renderFilm(filmsListContainerComponent.getElement(), filmItem));
+    .forEach((filmItem) => renderFilm(filmsListContainerComponent, filmItem));
 
     EXTRA_FILMS_CATEGORIES.forEach((category) => {
-      render(filmsContainerComponent.getElement(), new FilmsListExtraView(category).getElement());
+      render(filmsContainerComponent, new FilmsListExtraView(category));
     });
 
     const [topRatedNode, mostCommentedNode] = filmsContainerComponent.getElement()
@@ -97,12 +82,10 @@ const renderFilmBoard = (filmBoardContainer, filmItems) => {
     let renderedFilmsCounter = FILMS_COUNT_PER_STEP;
 
     const showMoreButtonComponent = new ShowMoreButtonView();
-    render(filmsListComponent.getElement(), showMoreButtonComponent.getElement());
+    render(filmsListComponent, showMoreButtonComponent);
 
 
-    showMoreButtonComponent.getElement().addEventListener(`click`, (evt) => {
-      evt.preventDefault();
-
+    showMoreButtonComponent.setClickHandler(() => {
       filmItems
       .slice(renderedFilmsCounter, renderedFilmsCounter + FILMS_COUNT_PER_STEP)
       .forEach((filmItem) => renderFilm(filmsListContainerComponent.getElement(), filmItem));
@@ -117,9 +100,9 @@ const renderFilmBoard = (filmBoardContainer, filmItems) => {
   }
 };
 
-render(headerElement, new RankView(filters.watched).getElement());
-render(main, new NavigationView(filters).getElement());
-render(main, new SortView().getElement());
-render(footerStatistics, new FooterStatisticsView(films).getElement());
+render(headerElement, new RankView(filters.watched));
+render(main, new NavigationView(filters));
+render(main, new SortView());
+render(footerStatistics, new FooterStatisticsView(films));
 
 renderFilmBoard(main, films);

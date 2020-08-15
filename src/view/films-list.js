@@ -1,4 +1,4 @@
-import AbstractView from "./abstract";
+import AbstractView from "./abstract.js";
 
 const createFilmsListTemplate = (films) => {
   const noFilmsHeaderTemplate = `<h2 class="films-list__title">There are no movies in our database</h2>`;

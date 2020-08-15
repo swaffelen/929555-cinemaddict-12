@@ -1,4 +1,4 @@
-import AbstractView from "./abstract";
+import AbstractView from "./abstract.js";
 
 const createNavigationTemplate = (filters) => {
   const {watchlisted, watched, favorite} = filters;
