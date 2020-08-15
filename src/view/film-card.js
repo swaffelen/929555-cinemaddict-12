@@ -1,5 +1,6 @@
 import {DESCRIPTION_MAX_LENGTH} from "../consts.js";
-import {inspectFlag, createElement} from "../util.js";
+import {inspectFlag} from "../util.js";
+import AbstractView from "./abstract.js";
 
 const createFilmCardTemplate = (film) => {
   const {title, poster, description, comments, rating,
@@ -31,25 +32,13 @@ const createFilmCardTemplate = (film) => {
   );
 };
 
-export default class FilmCard {
+export default class FilmCard extends AbstractView {
   constructor(film) {
+    super();
     this._film = film;
-    this._element = null;
   }
 
   getTemplate() {
     return createFilmCardTemplate(this._film);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }
