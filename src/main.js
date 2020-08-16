@@ -17,7 +17,7 @@ import {render, addElement, deleteElement} from "../src/utils/render.js";
 
 const FILMS_GRID_COUNT = 24;
 const FILMS_EXTRA_COUNT = 2;
-const FILMS_COUNT_PER_STEP = 5;
+const FILMS_LOAD_PER_STEP = 5;
 
 const headerElement = document.querySelector(`.header`);
 const main = document.querySelector(`.main`);
@@ -60,7 +60,7 @@ const renderFilmBoard = (filmBoardContainer, filmItems) => {
     render(filmsListComponent, filmsListContainerComponent);
 
     filmItems
-    .slice(0, Math.min(FILMS_GRID_COUNT, FILMS_COUNT_PER_STEP))
+    .slice(0, Math.min(FILMS_GRID_COUNT, FILMS_LOAD_PER_STEP))
     .forEach((filmItem) => renderFilm(filmsListContainerComponent, filmItem));
 
     EXTRA_FILMS_CATEGORIES.forEach((category) => {
@@ -78,8 +78,8 @@ const renderFilmBoard = (filmBoardContainer, filmItems) => {
     return;
   }
 
-  if (filmItems.length > FILMS_COUNT_PER_STEP) {
-    let renderedFilmsCounter = FILMS_COUNT_PER_STEP;
+  if (filmItems.length > FILMS_LOAD_PER_STEP) {
+    let renderedFilmsCounter = FILMS_LOAD_PER_STEP;
 
     const showMoreButtonComponent = new ShowMoreButtonView();
     render(filmsListComponent, showMoreButtonComponent);
@@ -87,10 +87,10 @@ const renderFilmBoard = (filmBoardContainer, filmItems) => {
 
     showMoreButtonComponent.setClickHandler(() => {
       filmItems
-      .slice(renderedFilmsCounter, renderedFilmsCounter + FILMS_COUNT_PER_STEP)
+      .slice(renderedFilmsCounter, renderedFilmsCounter + FILMS_LOAD_PER_STEP)
       .forEach((filmItem) => renderFilm(filmsListContainerComponent.getElement(), filmItem));
 
-      renderedFilmsCounter += FILMS_COUNT_PER_STEP;
+      renderedFilmsCounter += FILMS_LOAD_PER_STEP;
 
       if (renderedFilmsCounter >= filmItems.length) {
         showMoreButtonComponent.getElement().remove();
