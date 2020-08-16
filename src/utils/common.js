@@ -10,11 +10,3 @@ export const generateDate = (start, end) => {
 export const inspectFlag = (flag, template) => {
   return flag ? template : ``;
 };
-
-export const processEscPressKey = (evt, fn) => {
-  if (evt.key === `Escape` || evt.key === `Esc`) {
-    evt.preventDefault();
-    fn();
-    document.removeEventListener(`keydown`, fn);
-  }
-};

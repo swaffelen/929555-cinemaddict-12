@@ -5,13 +5,13 @@ export const RenderPosition = {
   BEFOREEND: `beforeend`
 };
 
-export const render = (container, element, place = RenderPosition.BEFOREEND) => {
-  if (container instanceof Abstract) {
-    container = container.getElement();
-  }
-
+export const render = (element, container, place = RenderPosition.BEFOREEND) => {
   if (element instanceof Abstract) {
     element = element.getElement();
+  }
+
+  if (container instanceof Abstract) {
+    container = container.getElement();
   }
 
   switch (place) {
@@ -40,7 +40,7 @@ export const renderTemplate = (container, text, position = `beforeend`) => {
   container.insertAdjacentHTML(position, text);
 };
 
-export const addElement = (element) => {
+export const insertElement = (element) => {
   if (element instanceof Abstract) {
     element = element.getElement();
   }
@@ -52,10 +52,18 @@ export const addElement = (element) => {
   }
 };
 
-export const deleteElement = (element) => {
+export const detachElement = (element) => {
   if (element instanceof Abstract) {
     element = element.getElement();
   }
   element.remove();
 };
 
+export const remove = (component) => {
+  if (!(component instanceof Abstract)) {
+    throw new Error(`Only components can be removed`);
+  }
+
+  component.getElement().remove();
+  component.removeElement();
+};
