@@ -109,13 +109,14 @@ export default class MovieList {
     this._renderExtraFilmsContainers();
     this._renderExtraFilms();
 
+
     if (this._films.length > FILMS_LOAD_PER_STEP) {
       this._renderShowMoreButton();
     }
   }
 
   _renderFilmsBoard() {
-    if (this._films) {
+    if (this._films.length) {
       this._renderFilmsGrid();
     }
   }
