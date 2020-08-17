@@ -49,6 +49,9 @@ export const insertElement = (element) => {
 
   if (!filmDetails) {
     document.body.append(element);
+  } else {
+    detachElement(filmDetails);
+    document.body.append(element);
   }
 };
 
