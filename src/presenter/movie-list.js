@@ -69,7 +69,7 @@ export default class MovieList {
 
     this._sortFilms(sortType);
     this._clearFilmList();
-    this._renderFilms();
+    this._renderFilmsGrid();
   }
 
   _renderSort() {
