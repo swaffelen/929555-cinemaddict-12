@@ -70,3 +70,16 @@ export const remove = (component) => {
   component.getElement().remove();
   component.removeElement();
 };
+
+export const sortByDate = (films) => {
+  return [...films].sort((a, b) => b.release.getTime() - a.release.getTime());
+};
+
+export const sortByRating = (films) => {
+  return films.slice().sort((a, b) => b.rating - a.rating);
+};
+
+export const sortByTopCommented = (films) => {
+  return [...films].slice().sort((a, b) => b.comments.length - a.comments.length);
+};
+
