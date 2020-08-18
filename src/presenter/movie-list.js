@@ -47,7 +47,6 @@ export default class MovieList {
         this._films.sort((a, b) => b.release.getTime() - a.release.getTime());
         break;
       case SortType.RATING:
-        console.log(sortByRating(this._films));
         sortByRating(this._films);
         break;
       default:

@@ -76,7 +76,7 @@ export const sortByDate = (films) => {
 };
 
 export const sortByRating = (films) => {
-  return films.slice().sort((a, b) => b.rating - a.rating);
+  return [...films].slice().sort((a, b) => b.rating - a.rating);
 };
 
 export const sortByTopCommented = (films) => {
