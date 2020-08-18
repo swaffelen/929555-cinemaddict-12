@@ -20,12 +20,13 @@ export default class MovieList {
     this._sourcedFilms = films.slice();
     this._filmsTopRated = sortByRating(this._films);
     this._filmsTopCommented = sortByTopCommented(this._films);
+    this._renderedFilmsCounter = FILMS_LOAD_PER_STEP;
+    this._currentSortType = SortType.BY_DEFAULT;
 
     this._sortComponent = new SortView();
     this._filmsListComponent = new FilmsListView(this._films);
     this._filmsContainerComponent = new FilmsContainerView();
     this._filmsListContainerComponent = new FilmsListContainerView();
-    this._renderedFilmsCounter = FILMS_LOAD_PER_STEP;
     this._showMoreButtonComponent = new ShowMoreButtonView();
 
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
@@ -108,7 +109,7 @@ export default class MovieList {
     render(filmCardComponent, container);
   }
 
-  _renderFilms(from = 0, to = Math.min(this._films.length, FILMS_LOAD_PER_STEP)) {
+  _renderFilms(from, to) {
     this._films
     .slice(from, to)
     .forEach((film) => this._renderFilm(film));
@@ -147,10 +148,7 @@ export default class MovieList {
   }
 
   _renderFilmsGrid() {
-    this._renderFilms();
-    this._renderExtraFilmsContainers();
-    this._renderExtraFilms();
-
+    this._renderFilms(0, Math.min(this._films.length, FILMS_LOAD_PER_STEP));
 
     if (this._films.length > FILMS_LOAD_PER_STEP) {
       this._renderShowMoreButton();
@@ -160,6 +158,8 @@ export default class MovieList {
   _renderFilmsBoard() {
     if (this._films.length) {
       this._renderFilmsGrid();
+      this._renderExtraFilmsContainers();
+      this._renderExtraFilms();
     }
   }
 }
