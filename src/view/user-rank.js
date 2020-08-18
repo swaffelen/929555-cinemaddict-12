@@ -1,4 +1,4 @@
-import {createElement} from "../util.js";
+import AbstractView from "./abstract.js";
 
 const UserRank = {
   novice: `novice`,
@@ -30,25 +30,13 @@ const createUserRankTemplate = (filmsWatched) => {
 };
 
 
-export default class Rank {
+export default class Rank extends AbstractView {
   constructor(filmsWatched) {
+    super();
     this._filmsWatched = filmsWatched;
-    this._element = null;
   }
 
   getTemplate() {
     return createUserRankTemplate(this._filmsWatched);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

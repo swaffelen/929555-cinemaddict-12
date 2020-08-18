@@ -1,4 +1,4 @@
-import {createElement} from "../util.js";
+import AbstractView from "./abstract.js";
 
 const createFilmsListTemplate = (films) => {
   const noFilmsHeaderTemplate = `<h2 class="films-list__title">There are no movies in our database</h2>`;
@@ -10,25 +10,13 @@ const createFilmsListTemplate = (films) => {
   );
 };
 
-export default class FilmsList {
+export default class FilmsList extends AbstractView {
   constructor(films) {
+    super();
     this._films = films;
-    this._element = null;
   }
 
   getTemplate() {
     return createFilmsListTemplate(this._films);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

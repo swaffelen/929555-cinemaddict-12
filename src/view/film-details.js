@@ -1,5 +1,6 @@
 import {EMOJIS} from "../consts.js";
-import {inspectFlag, createElement} from "../util.js";
+import {inspectFlag} from "../utils/common.js";
+import AbstractView from "./abstract.js";
 
 const createGenresTemplate = (genres) => {
   return (
@@ -151,25 +152,28 @@ const createFilmPopupTemplate = (film) => {
   );
 };
 
-export default class FilmDetails {
+export default class FilmDetails extends AbstractView {
   constructor(film) {
+    super();
     this._film = film;
-    this._element = null;
+    this._clickHandler = this._clickHandler.bind(this);
   }
 
   getTemplate() {
     return createFilmPopupTemplate(this._film);
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
+  _clickHandler(evt) {
+    evt.preventDefault();
 
-    return this._element;
+    this._callback.click();
+    this.removeElement();
   }
 
-  removeElement() {
-    this._element = null;
+  setClickHandler(callback) {
+    this._callback.click = callback;
+
+    this.getElement().querySelector(`.film-details__close-btn`)
+    .addEventListener(`click`, this._clickHandler);
   }
 }

@@ -1,5 +1,5 @@
 import {EMOJIS} from "../consts.js";
-import {getRandomInteger, generateDate} from "../util.js";
+import {getRandomInteger, generateDate} from "../utils/common.js";
 
 const TEXT_FILLERS = [
   `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras aliquet varius magna, non porta ligula feugiat eget. `,
