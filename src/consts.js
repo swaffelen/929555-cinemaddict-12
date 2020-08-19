@@ -11,3 +11,9 @@ export const EMOJIS = [
 ];
 
 export const DESCRIPTION_MAX_LENGTH = 139;
+
+export const SortType = {
+  BY_DEFAULT: `default`,
+  BY_DATE: `date`,
+  BY_RATING: `rating`
+};
