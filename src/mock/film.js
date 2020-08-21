@@ -137,7 +137,10 @@ export const generateFilm = () => {
 
   const runtime = convertMinsIntoHours(getRandomInteger(16, 180));
 
+  const generateId = () => Date.now() + parseInt(Math.random() * 10000, 10);
+
   return {
+    id: generateId(),
     title: TITLES[getRandomInteger(0, TITLES.length - 1)],
     poster: POSTERS[getRandomInteger(0, POSTERS.length - 1)],
     description: generateDescription(),
