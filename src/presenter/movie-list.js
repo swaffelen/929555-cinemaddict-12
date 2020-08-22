@@ -6,8 +6,7 @@ import ShowMoreButtonView from "../view/show-more-button.js";
 import FilmsListExtraView from "../view/films-list-extra.js";
 import FilmPresenter from "./film.js";
 import {EXTRA_FILMS_CATEGORIES, SortType} from "../consts.js";
-import {render, insertElement, detachElement,
-  remove, sortByRating, sortByTopCommented, sortByDate} from "../utils/render.js";
+import {render, remove, sortByRating, sortByTopCommented, sortByDate} from "../utils/render.js";
 
 const FILMS_EXTRA_COUNT = 2;
 const FILMS_LOAD_PER_STEP = 5;
@@ -40,7 +39,6 @@ export default class MovieList {
     render(this._filmsListContainerComponent, this._filmsListComponent);
 
     this._renderFilmsBoard();
-    console.log(this._filmPresenter, this._renderedFilmsCounter);
   }
 
   _sortFilms(sortType) {
@@ -124,7 +122,7 @@ export default class MovieList {
       .forEach((presenter) => presenter.destroy());
     this._filmPresenter = {};
     this._renderedFilmsCounter = FILMS_LOAD_PER_STEP;
-    console.log(this._filmPresenter, this._renderedFilmsCounter);
+    // console.log(this._filmPresenter, this._renderedFilmsCounter);
   }
 
   _renderFilmsGrid() {
