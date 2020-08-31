@@ -1,6 +1,7 @@
 import {EMOJIS} from "../consts.js";
 import {inspectFlag} from "../utils/common.js";
-import AbstractView from "./abstract.js";
+import SmartView from "./smart.js";
+import {renderTemplate} from "../utils/render.js";
 
 const createGenresTemplate = (genres) => {
   return (
@@ -36,9 +37,9 @@ const createCommentsTemplate = (comments) => {
   }).join(``);
 };
 
-const createFilmPopupTemplate = (film) => {
+const createFilmPopupTemplate = (data) => {
   const {poster, age, title, rating, director, writers,
-    cast, release, runtime, country, genres, description, comments, isWatchlisted, isWatched, isFavorite} = film;
+    cast, release, runtime, country, genres, description, comments, isWatchlisted, isWatched, isFavorite} = data;
 
   const genresTemplate = createGenresTemplate(genres);
 
@@ -138,7 +139,8 @@ const createFilmPopupTemplate = (film) => {
         </ul>
 
         <div class="film-details__new-comment">
-          <div for="add-emoji" class="film-details__add-emoji-label"></div>
+          <div for="add-emoji" class="film-details__add-emoji-label">
+          </div>
 
           <label class="film-details__comment-label">
             <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment"></textarea>
@@ -152,28 +154,60 @@ const createFilmPopupTemplate = (film) => {
   );
 };
 
-export default class FilmDetails extends AbstractView {
-  constructor(film) {
+export default class FilmDetails extends SmartView {
+  constructor(data) {
     super();
-    this._film = film;
-    this._clickHandler = this._clickHandler.bind(this);
+    this._data = data;
+    this._clickCloseButtonHandler = this._clickCloseButtonHandler.bind(this);
+    this._emojiClickHandler = this._emojiClickHandler.bind(this);
+
+    this.setInnerHandlers();
   }
 
   getTemplate() {
-    return createFilmPopupTemplate(this._film);
+    return createFilmPopupTemplate(this._data);
   }
 
-  _clickHandler(evt) {
+  _emojiClickHandler(evt) {
+    evt.preventDefault();
+    this._emojiContainer = this.getElement().querySelector(`.film-details__add-emoji-label`);
+    this._emoji = evt.target.value;
+    this._createEmojiTemplate = () => {
+      return `<img src="images/emoji/${this._emoji}.png" width="55" height="55" alt="emoji-${this._emoji}">`;
+    };
+
+    if (this._emojiContainer.getElementsByTagName(`img`)) {
+      this._emojiContainer.innerHTML = ``;
+    }
+    renderTemplate(this._emojiContainer, this._createEmojiTemplate());
+  }
+
+  _clickCloseButtonHandler(evt) {
     evt.preventDefault();
 
     this._callback.click();
     this.removeElement();
   }
 
-  setClickHandler(callback) {
+  setInnerHandlers() {
+    this._setEmojiClickHandler();
+  }
+
+  setClosePopupClickHandler(callback) {
     this._callback.click = callback;
 
     this.getElement().querySelector(`.film-details__close-btn`)
-    .addEventListener(`click`, this._clickHandler);
+    .addEventListener(`click`, this._clickCloseButtonHandler);
+  }
+
+  _setEmojiClickHandler() {
+    this.getElement()
+      .querySelector(`.film-details__emoji-list`)
+      .addEventListener(`change`, this._emojiClickHandler);
+  }
+
+  restoreHandlers() {
+    this.setClosePopupClickHandler(this._clickCloseButtonHandler);
+    this.setInnerHandlers();
   }
 }

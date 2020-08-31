@@ -28,13 +28,10 @@ export default class Film {
     this._filmCardComponent = new FilmCardView(film);
     this._filmDetailsComponent = new FilmDetailsView(film);
 
-    this._filmCardComponent.setClickHandler(this._openPopup);
+    this._filmCardComponent.setOpenPopupClickHandler(this._openPopup);
     this._filmCardComponent.setWatchlistClickHandler(this._handleWatchlistClick);
     this._filmCardComponent.setWatchedClickHandler(this._handleWatchedClick);
     this._filmCardComponent.setFavoriteClickHandler(this._handleFavoriteClick);
-
-    this._filmDetailsComponent.setClickHandler(this._closePopup);
-    render(this._filmCardComponent, this._filmListContainer);
 
     if (prevFilmCardComponent === null || prevFilmDetailsComponent === null) {
       render(this._filmCardComponent, this._filmListContainer);
@@ -74,6 +71,7 @@ export default class Film {
   }
 
   _openPopup() {
+    this._filmDetailsComponent.setClosePopupClickHandler(this._closePopup);
     insertElement(this._filmDetailsComponent);
     document.addEventListener(`keydown`, this._onPopupEscPress);
   }
