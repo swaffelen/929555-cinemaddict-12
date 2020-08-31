@@ -32,6 +32,7 @@ export default class MovieList {
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
     this._handleShowMoreButtonClick = this._handleShowMoreButtonClick.bind(this);
     this._handleFilmChange = this._handleFilmChange.bind(this);
+    this._handleStateChange = this._handleStateChange.bind(this);
   }
 
   init() {
@@ -76,13 +77,19 @@ export default class MovieList {
     // this._renderExtraFilms();
   }
 
+  _handleStateChange() {
+    Object
+      .values(this._filmPresenter)
+      .forEach((presenter) => presenter.resetState());
+  }
+
   _renderSort() {
     render(this._sortComponent, this._filmBoardContainer);
     this._sortComponent.setClickHandler(this._handleSortTypeChange);
   }
 
   _renderFilm(film, container = this._filmsListContainerComponent) {
-    const filmPresenter = new FilmPresenter(container, this._handleFilmChange);
+    const filmPresenter = new FilmPresenter(container, this._handleFilmChange, this._handleStateChange);
     filmPresenter.init(film);
     this._filmPresenter[film.id] = filmPresenter;
   }

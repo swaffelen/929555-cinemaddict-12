@@ -155,17 +155,80 @@ const createFilmPopupTemplate = (data) => {
 };
 
 export default class FilmDetails extends SmartView {
-  constructor(data) {
+  constructor(data, changeFilmData) {
     super();
     this._data = data;
+
+    this.changeFilmData = changeFilmData;
     this._clickCloseButtonHandler = this._clickCloseButtonHandler.bind(this);
     this._emojiClickHandler = this._emojiClickHandler.bind(this);
+    this._watchedClickHandler = this._watchedClickHandler.bind(this);
+    this._watchlistClickHandler = this._watchlistClickHandler.bind(this);
+    this._favoriteClickHandler = this._favoriteClickHandler.bind(this);
 
     this.setInnerHandlers();
   }
 
   getTemplate() {
     return createFilmPopupTemplate(this._data);
+  }
+
+  _clickCloseButtonHandler(evt) {
+    evt.preventDefault();
+
+    this._callback.click();
+    this.removeElement();
+  }
+
+  setInnerHandlers() {
+    this.getElement()
+    .querySelector(`.film-details__emoji-list`)
+    .addEventListener(`change`, this._emojiClickHandler);
+
+    this.getElement()
+    .querySelector(`#watchlist`)
+    .addEventListener(`change`, this._watchlistClickHandler);
+
+    this.getElement()
+      .querySelector(`#watched`)
+      .addEventListener(`change`, this._watchedClickHandler);
+
+    this.getElement()
+    .querySelector(`#favorite`)
+    .addEventListener(`change`, this._favoriteClickHandler);
+  }
+
+  setClosePopupClickHandler(callback) {
+    this._callback.click = callback;
+
+    this.getElement().querySelector(`.film-details__close-btn`)
+    .addEventListener(`click`, this._clickCloseButtonHandler);
+  }
+
+  restoreHandlers() {
+    this.setClosePopupClickHandler(this._clickCloseButtonHandler);
+    this.setInnerHandlers();
+  }
+
+  _watchlistClickHandler(evt) {
+    evt.preventDefault();
+
+    this.updateData({isWatchlisted: !this._data.isWatchlisted}, true);
+    this.changeFilmData(this._data);
+  }
+
+  _watchedClickHandler(evt) {
+    evt.preventDefault();
+
+    this.updateData({isWatched: !this._data.isWatched}, true);
+    this.changeFilmData(this._data);
+  }
+
+  _favoriteClickHandler(evt) {
+    evt.preventDefault();
+
+    this.updateData({isFavorite: !this._data.isFavorite}, true);
+    this.changeFilmData(this._data);
   }
 
   _emojiClickHandler(evt) {
@@ -180,34 +243,5 @@ export default class FilmDetails extends SmartView {
       this._emojiContainer.innerHTML = ``;
     }
     renderTemplate(this._emojiContainer, this._createEmojiTemplate());
-  }
-
-  _clickCloseButtonHandler(evt) {
-    evt.preventDefault();
-
-    this._callback.click();
-    this.removeElement();
-  }
-
-  setInnerHandlers() {
-    this._setEmojiClickHandler();
-  }
-
-  setClosePopupClickHandler(callback) {
-    this._callback.click = callback;
-
-    this.getElement().querySelector(`.film-details__close-btn`)
-    .addEventListener(`click`, this._clickCloseButtonHandler);
-  }
-
-  _setEmojiClickHandler() {
-    this.getElement()
-      .querySelector(`.film-details__emoji-list`)
-      .addEventListener(`change`, this._emojiClickHandler);
-  }
-
-  restoreHandlers() {
-    this.setClosePopupClickHandler(this._clickCloseButtonHandler);
-    this.setInnerHandlers();
   }
 }

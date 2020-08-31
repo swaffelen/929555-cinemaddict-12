@@ -1,6 +1,6 @@
 import {DESCRIPTION_MAX_LENGTH} from "../consts.js";
 import {inspectFlag} from "../utils/common.js";
-import SmartView from "./smart.js";
+import AbstractView from "./abstract.js";
 
 const createFilmCardTemplate = (film) => {
   const {title, poster, description, comments, rating,
@@ -32,53 +32,18 @@ const createFilmCardTemplate = (film) => {
   );
 };
 
-export default class FilmCard extends SmartView {
-  constructor(data) {
+export default class FilmCard extends AbstractView {
+  constructor(film) {
     super();
-    this._data = data;
+    this._film = film;
     this._openPopupClickHandler = this._openPopupClickHandler.bind(this);
     this._watchlistClickHandler = this._watchlistClickHandler.bind(this);
     this._watchedClickHandler = this._watchedClickHandler.bind(this);
     this._favoriteClickHandler = this._favoriteClickHandler.bind(this);
-
-    // this.restoreHandlers();
   }
 
   getTemplate() {
-    return createFilmCardTemplate(this._data);
-  }
-
-  _openPopupClickHandler(evt) {
-    evt.preventDefault();
-
-    const poster = this.getElement().querySelector(`.film-card__poster`);
-    const title = this.getElement().querySelector(`.film-card__title`);
-    const comments = this.getElement().querySelector(`.film-card__comments`);
-
-    if (evt.target === poster || evt.target === title || evt.target === comments) {
-      this._callback.click();
-    }
-  }
-
-  _watchlistClickHandler(evt) {
-    evt.preventDefault();
-
-    this._callback.watchlistClick();
-    this.updateData({isWatchlisted: !this._data.isWatchlisted}, true);
-  }
-
-  _watchedClickHandler(evt) {
-    evt.preventDefault();
-
-    this._callback.watchedClick();
-    this.updateData({isWatched: !this._data.isWatched}, true);
-  }
-
-  _favoriteClickHandler(evt) {
-    evt.preventDefault();
-
-    this._callback.favoriteClick();
-    this.updateData({isFavorite: !this._data.isFavorite}, true);
+    return createFilmCardTemplate(this._film);
   }
 
   setOpenPopupClickHandler(callback) {
@@ -110,10 +75,33 @@ export default class FilmCard extends SmartView {
       .addEventListener(`click`, this._favoriteClickHandler);
   }
 
-  restoreHandlers() {
-    this.setOpenPopupClickHandler(this._openPopupClickHandler);
-    this.setWatchlistClickHandler(this._watchlistClickHandler);
-    this.setWatchedClickHandler(this._watchedClickHandler);
-    this.setFavoriteClickHandler(this._favoriteClickHandler);
+  _openPopupClickHandler(evt) {
+    evt.preventDefault();
+
+    const poster = this.getElement().querySelector(`.film-card__poster`);
+    const title = this.getElement().querySelector(`.film-card__title`);
+    const comments = this.getElement().querySelector(`.film-card__comments`);
+
+    if (evt.target === poster || evt.target === title || evt.target === comments) {
+      this._callback.click();
+    }
+  }
+
+  _watchlistClickHandler(evt) {
+    evt.preventDefault();
+
+    this._callback.watchlistClick();
+  }
+
+  _watchedClickHandler(evt) {
+    evt.preventDefault();
+
+    this._callback.watchedClick();
+  }
+
+  _favoriteClickHandler(evt) {
+    evt.preventDefault();
+
+    this._callback.favoriteClick();
   }
 }

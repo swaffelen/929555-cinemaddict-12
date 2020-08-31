@@ -45,14 +45,7 @@ export const insertElement = (element) => {
     element = element.getElement();
   }
 
-  const filmDetails = document.body.querySelector(`.film-details`);
-
-  if (!filmDetails) {
-    document.body.append(element);
-  } else {
-    detachElement(filmDetails);
-    document.body.append(element);
-  }
+  document.body.append(element);
 };
 
 export const detachElement = (element) => {
