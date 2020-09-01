@@ -2,13 +2,12 @@ import SortView from "../view/sort.js";
 import FilmsContainerView from "../view/films-container.js";
 import FilmsListView from "../view/films-list.js";
 import FilmsListContainerView from "../view/films-list-container.js";
-import FilmCardView from "../view/film-card.js";
 import ShowMoreButtonView from "../view/show-more-button.js";
 import FilmsListExtraView from "../view/films-list-extra.js";
-import FilmDetailsView from "../view/film-details.js";
+import FilmPresenter from "./film.js";
 import {EXTRA_FILMS_CATEGORIES, SortType} from "../consts.js";
-import {render, insertElement, detachElement,
-  remove, sortByRating, sortByTopCommented, sortByDate} from "../utils/render.js";
+import {updateItem} from "../utils/common.js";
+import {render, remove, sortByRating, sortByTopCommented, sortByDate} from "../utils/render.js";
 
 const FILMS_EXTRA_COUNT = 2;
 const FILMS_LOAD_PER_STEP = 5;
@@ -22,6 +21,7 @@ export default class MovieList {
     this._filmsTopCommented = sortByTopCommented(this._films);
     this._renderedFilmsCounter = FILMS_LOAD_PER_STEP;
     this._currentSortType = SortType.BY_DEFAULT;
+    this._filmPresenter = {};
 
     this._sortComponent = new SortView();
     this._filmsListComponent = new FilmsListView(this._films);
@@ -31,6 +31,8 @@ export default class MovieList {
 
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
     this._handleShowMoreButtonClick = this._handleShowMoreButtonClick.bind(this);
+    this._handleFilmChange = this._handleFilmChange.bind(this);
+    this._handleStateChange = this._handleStateChange.bind(this);
   }
 
   init() {
@@ -40,6 +42,13 @@ export default class MovieList {
     render(this._filmsListContainerComponent, this._filmsListComponent);
 
     this._renderFilmsBoard();
+  }
+
+  _handleFilmChange(updatedFilm) {
+    this._films = updateItem(this._films, updatedFilm);
+
+    this._sourcedFilms = updateItem(this._sourcedFilms, updatedFilm);
+    this._filmPresenter[updatedFilm.id].init(updatedFilm);
   }
 
   _sortFilms(sortType) {
@@ -57,11 +66,6 @@ export default class MovieList {
     this._currentSortType = sortType;
   }
 
-  _clearFilmList() {
-    this._filmsListContainerComponent.getElement().innerHTML = ``;
-    this._renderedFilmsCounter = FILMS_LOAD_PER_STEP;
-  }
-
   _handleSortTypeChange(sortType) {
     if (this._currentSortType === sortType) {
       return;
@@ -70,6 +74,13 @@ export default class MovieList {
     this._sortFilms(sortType);
     this._clearFilmList();
     this._renderFilmsGrid();
+    // this._renderExtraFilms();
+  }
+
+  _handleStateChange() {
+    Object
+      .values(this._filmPresenter)
+      .forEach((presenter) => presenter.resetState());
   }
 
   _renderSort() {
@@ -78,41 +89,31 @@ export default class MovieList {
   }
 
   _renderFilm(film, container = this._filmsListContainerComponent) {
-    const filmCardComponent = new FilmCardView(film);
-    const filmDetailsComponent = new FilmDetailsView(film);
-
-    const newCommentInput = filmDetailsComponent
-      .getElement()
-      .querySelector(`.film-details__comment-input`);
-
-    const onPopupEscPress = (evt) => {
-      if (evt.key === `Escape` || evt.key === `Esc`) {
-        evt.preventDefault();
-        if (document.activeElement !== newCommentInput) {
-          detachElement(filmDetailsComponent);
-        }
-      } else {
-        newCommentInput.blur();
-      }
-    };
-
-    filmCardComponent.setClickHandler(() => {
-      insertElement(filmDetailsComponent);
-      document.addEventListener(`keydown`, onPopupEscPress);
-    });
-
-    filmDetailsComponent.setClickHandler(() => {
-      detachElement(filmDetailsComponent);
-      document.removeEventListener(`keydown`, onPopupEscPress);
-    });
-
-    render(filmCardComponent, container);
+    const filmPresenter = new FilmPresenter(container, this._handleFilmChange, this._handleStateChange);
+    filmPresenter.init(film);
+    this._filmPresenter[film.id] = filmPresenter;
   }
 
   _renderFilms(from, to) {
     this._films
     .slice(from, to)
     .forEach((film) => this._renderFilm(film));
+  }
+
+  _renderExtraFilmsContainers() {
+    EXTRA_FILMS_CATEGORIES.forEach((category) => {
+      render(new FilmsListExtraView(category), this._filmsContainerComponent);
+    });
+  }
+
+  _renderExtraFilms() {
+    [this._topRatedNode, this._mostCommentedNode] = this._filmsContainerComponent.getElement()
+    .querySelectorAll(`.films-list--extra .films-list__container`);
+
+    for (let i = 0; i < FILMS_EXTRA_COUNT; i++) {
+      this._renderFilm(this._filmsTopRated[i], this._topRatedNode);
+      this._renderFilm(this._filmsTopCommented[i], this._mostCommentedNode);
+    }
   }
 
   _handleShowMoreButtonClick() {
@@ -131,20 +132,15 @@ export default class MovieList {
     this._showMoreButtonComponent.setClickHandler(this._handleShowMoreButtonClick);
   }
 
-  _renderExtraFilmsContainers() {
-    EXTRA_FILMS_CATEGORIES.forEach((category) => {
-      render(new FilmsListExtraView(category), this._filmsContainerComponent);
-    });
-  }
-
-  _renderExtraFilms() {
-    const [topRatedNode, mostCommentedNode] = this._filmsContainerComponent.getElement()
-    .querySelectorAll(`.films-list--extra .films-list__container`);
-
-    for (let i = 0; i < FILMS_EXTRA_COUNT; i++) {
-      this._renderFilm(this._filmsTopRated[i], topRatedNode);
-      this._renderFilm(this._filmsTopCommented[i], mostCommentedNode);
-    }
+  _clearFilmList() {
+    Object
+      .values(this._filmPresenter)
+      .forEach((presenter) => presenter.destroy());
+    // this._filmsListContainerComponent.getElement().innerHTML = ``;
+    // this._topRatedNode.innerHTML = ``;
+    // this._mostCommentedNode.innerHTML = ``;
+    this._filmPresenter = {};
+    this._renderedFilmsCounter = FILMS_LOAD_PER_STEP;
   }
 
   _renderFilmsGrid() {
@@ -158,8 +154,8 @@ export default class MovieList {
   _renderFilmsBoard() {
     if (this._films.length) {
       this._renderFilmsGrid();
-      this._renderExtraFilmsContainers();
-      this._renderExtraFilms();
+      // this._renderExtraFilmsContainers();
+      // this._renderExtraFilms();
     }
   }
 }
