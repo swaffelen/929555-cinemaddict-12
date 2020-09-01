@@ -1,4 +1,5 @@
 import Abstract from "../view/abstract.js";
+import moment from "moment";
 
 export const RenderPosition = {
   AFTERBEGIN: `afterbegin`,
@@ -84,7 +85,7 @@ export const replace = (newChild, oldChild) => {
 
 
 export const sortByDate = (films) => {
-  return [...films].sort((a, b) => b.release.getTime() - a.release.getTime());
+  return [...films].sort((a, b) => moment(b.release).valueOf() - moment(a.release).valueOf());
 };
 
 export const sortByRating = (films) => {
