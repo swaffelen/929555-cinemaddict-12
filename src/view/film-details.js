@@ -1,5 +1,5 @@
 import {EMOJIS} from "../consts.js";
-import {inspectFlag} from "../utils/common.js";
+import {inspectFlag, getCommentDate} from "../utils/common.js";
 import SmartView from "./smart.js";
 import {renderTemplate} from "../utils/render.js";
 
@@ -16,8 +16,7 @@ const createCommentsTemplate = (comments) => {
   return comments.map((comment) => {
     const {emotion, message, name, date} = comment;
 
-    const day = date.toLocaleString(`en-US`, {day: `numeric`, month: `numeric`, year: `numeric`});
-    const time = `${date.getHours()}:${date.getMinutes()}`;
+    const commentDate = getCommentDate(date);
 
     return (
       `<li class="film-details__comment">
@@ -28,7 +27,7 @@ const createCommentsTemplate = (comments) => {
         <p class="film-details__comment-text">${message}</p>
         <p class="film-details__comment-info">
           <span class="film-details__comment-author">${name}</span>
-          <span class="film-details__comment-day">${day} ${time}</span>
+          <span class="film-details__comment-day">${commentDate}</span>
           <button class="film-details__comment-delete">Delete</button>
         </p>
       </div>
@@ -42,8 +41,6 @@ const createFilmPopupTemplate = (data) => {
     cast, release, runtime, country, genres, description, comments, isWatchlisted, isWatched, isFavorite} = data;
 
   const genresTemplate = createGenresTemplate(genres);
-
-  const releaseDate = `${release.getDate()} ${release.toLocaleString(`en-US`, {month: `long`, year: `numeric`})}`;
 
   const commentsTemplate = createCommentsTemplate(comments);
 
@@ -97,7 +94,7 @@ const createFilmPopupTemplate = (data) => {
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Release Date</td>
-              <td class="film-details__cell">${releaseDate}</td>
+              <td class="film-details__cell">${release}</td>
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Runtime</td>

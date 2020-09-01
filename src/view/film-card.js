@@ -1,5 +1,5 @@
 import {DESCRIPTION_MAX_LENGTH} from "../consts.js";
-import {inspectFlag} from "../utils/common.js";
+import {inspectFlag, getYearFormat} from "../utils/common.js";
 import AbstractView from "./abstract.js";
 
 const createFilmCardTemplate = (film) => {
@@ -10,7 +10,7 @@ const createFilmCardTemplate = (film) => {
 
   const descriptionText = description.length > DESCRIPTION_MAX_LENGTH ? `${description.slice(0, DESCRIPTION_MAX_LENGTH)}...` : description;
 
-  const year = release.getFullYear();
+  const year = getYearFormat(release);
   return (
     `<article class="film-card">
           <h3 class="film-card__title">${title}</h3>

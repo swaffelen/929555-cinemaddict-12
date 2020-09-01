@@ -1,5 +1,5 @@
 import {EMOJIS} from "../consts.js";
-import {getRandomInteger, generateDate} from "../utils/common.js";
+import {getRandomInteger, generateDate, getReleaseDate, getRuntimeFormat} from "../utils/common.js";
 
 const TEXT_FILLERS = [
   `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras aliquet varius magna, non porta ligula feugiat eget. `,
@@ -102,12 +102,12 @@ const generateDescription = () => {
   }, ``);
 };
 
-const convertMinsIntoHours = (value) => {
-  const minutes = (value % 60);
-  const hours = (value - minutes) / 60;
+// const convertMinsIntoHours = (value) => {
+//   const minutes = (value % 60);
+//   const hours = (value - minutes) / 60;
 
-  return `${hours}h ${minutes}m`;
-};
+//   return `${hours}h ${minutes}m`;
+// };
 
 const generateComments = () => {
   return {
@@ -133,9 +133,9 @@ export const generateFilm = () => {
   const comments = Array.from({length: getRandomInteger(0, 10)})
   .map(generateComments);
 
-  const release = generateDate(new Date(1896, 0, 1), new Date(2020, 0, 1));
+  const release = getReleaseDate(generateDate(new Date(1896, 0, 1), new Date(2020, 0, 1)));
 
-  const runtime = convertMinsIntoHours(getRandomInteger(16, 180));
+  const runtime = getRuntimeFormat(getRandomInteger(16, 180));
 
   const generateId = () => Date.now() + parseInt(Math.random() * 10000, 10);
 
